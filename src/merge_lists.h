@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 template <typename E>
 class DLinkedList;
 
@@ -43,6 +45,31 @@ public:
     }
     void removeBack() {                       //  remove from back
         remove(trailer->prev);
+    }
+    void print() const {
+        DNode<E>* current = header->next;
+        while (current != trailer) {
+            std::cout << current->elem << std::endl;
+            current = current->next;
+        }
+    }
+    void addSorted(const DLinkedList<E>& other) {
+        DNode<E>* current = header->next;
+        DNode<E>* otherCurrent = other.header->next;
+
+        while (current != trailer && otherCurrent != other.trailer) {
+            if (current->elem < otherCurrent->elem) {
+                current = current->next;
+            } else {
+                add(current, otherCurrent->elem);
+                otherCurrent = otherCurrent->next;
+            }
+        }
+
+        while (otherCurrent != other.trailer) {
+            addBack(otherCurrent->elem);
+            otherCurrent = otherCurrent->next;
+        }
     }
 private:
     DNode<E>* header;                         // head sentinel
